@@ -37,10 +37,10 @@ om=function(sam,i){
   source("E:/SCBM/test326/fun_GL_GREED.R")
   #hte_test1=marslasso_GLPSTO(traindat,testdat,ps,deg=1,boost=10,per_resamp=0.2)
 
-  # write.csv(datalist1,sprintf("E:/SCBM/dat.24.05.39/train/scenario_sam%s_boost%s.csv",1,1),row.names = FALSE)
-  # write.csv(datalist2,sprintf("E:/SCBM/dat.24.05.39/test/scenario_sam%s_boost%s.csv",1,1),row.names = FALSE)
-  # datalist1=read.csv(sprintf("E:/SCBM/dat.24.05.39/train/scenario_sam%s_boost%s.csv",1,1))
-  # datalist2=read.csv(sprintf("E:/SCBM/dat.24.05.39/test/scenario_sam%s_boost%s.csv",1,1))
+  # write.csv(datalist1,sprintf("paste0(getwd(), "/")train/scenario_sam%s_boost%s.csv",1,1),row.names = FALSE)
+  # write.csv(datalist2,sprintf("paste0(getwd(), "/")test/scenario_sam%s_boost%s.csv",1,1),row.names = FALSE)
+  # datalist1=read.csv(sprintf("paste0(getwd(), "/")train/scenario_sam%s_boost%s.csv",1,1))
+  # datalist2=read.csv(sprintf("paste0(getwd(), "/")test/scenario_sam%s_boost%s.csv",1,1))
   traindat=cbind(1,datalist1)
   testdat=cbind(1,datalist2)
   ps=rep(0.5,nrow(datalist1))
@@ -76,7 +76,7 @@ om=function(sam,i){
       res.save$hte4 <- hte_test4
       
       # 保存结果
-      output_path <- sprintf("E:/SCBM/dat.24.05.39/out/scenario%s_sam%s_boost%s.csv", i, g_sam, g_boost)
+      output_path <- sprintf("paste0(getwd(), "/")out/scenario%s_sam%s_boost%s.csv", i, g_sam, g_boost)
       write.csv(res.save, output_path)
  
       print(sprintf("Finished boost=%s, sam=%s", g_boost, g_sam))

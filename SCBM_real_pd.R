@@ -241,7 +241,7 @@ VIMP_PLOT=ggplot(data, aes(x = Variable, y = Importance, fill = Importance)) +
 
 # --- Save Plot to File ---
 ggsave(
-  filename = paste0(file.path(getwd(), ""), "VIMPx", ".eps"), # 修改扩展名为 .eps
+  filename = paste0(paste0(getwd(), "/pic/"), "VIMPx", ".eps"), # 修改扩展名为 .eps
   plot = VIMP_PLOT, # 图像对象
   width = 12, # 图像宽度
   height = 8, # 图像高度
@@ -350,7 +350,7 @@ ggsave(
 
 # --- Save Plot to File ---
   ggsave(
-    filename = paste0(file.path(getwd(), ""), "PDPLOTx", ".eps"), # 修改扩展名为 .eps
+    filename = paste0(paste0(getwd(), "/pic/"), "PDPLOTx", ".eps"), # 修改扩展名为 .eps
     plot = grid_plot, # 图像对象
     width = 12, # 图像宽度
     height = 6, # 图像高度
@@ -426,6 +426,8 @@ earthlasso <- function(datain,TO,btype=1,deg,maxn,samp){
 ##################################
 ####################################
 ####################################
+
+
 
 
 

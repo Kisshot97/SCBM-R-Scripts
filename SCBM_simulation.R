@@ -213,7 +213,7 @@ om=function(f){ ############sim func#################
     datalist1=datagen(mu0,tau0,typex[ddad],X,noise)
 
 # --- Save Results to CSV ---
-    write.csv(datalist1,sprintf(file.path(getwd(), "scenario%s_n%s_p%s_%s_noise%s.csv"),ddad,nx[nn],px[pp],v,noise),row.names = FALSE)
+    write.csv(datalist1,sprintf(paste0(getwd(), "/train/scenario%s_n%s_p%s_%s_noise%s.csv"),ddad,nx[nn],px[pp],v,noise),row.names = FALSE)
     #=======test data=====================
     X=Xgen(n=nx[nn],p=px[pp])
     fn_tau=fnum_tau(X)
@@ -224,16 +224,16 @@ om=function(f){ ############sim func#################
     datalist2=datagen(mu0,tau0,typex[ddad],X,noise)
 
 # --- Save Results to CSV ---
-    write.csv(datalist2,sprintf(file.path(getwd(), "scenario%s_n%s_p%s_%s_noise%s.csv"),ddad,nx[nn],px[pp],v,noise),row.names = FALSE)
+    write.csv(datalist2,sprintf(paste0(getwd(), "/test/scenario%s_n%s_p%s_%s_noise%s.csv"),ddad,nx[nn],px[pp],v,noise),row.names = FALSE)
     #############read################
     
   }else{
 
 # --- Load CSV Data ---
-    datalist1=read.csv(sprintf(file.path(getwd(), "scenario%s_n%s_p%s_%s_noise%s.csv"),ddad,nx[nn],px[pp],v,noise))
+    datalist1=read.csv(sprintf(paste0(getwd(), "/train/scenario%s_n%s_p%s_%s_noise%s.csv"),ddad,nx[nn],px[pp],v,noise))
 
 # --- Load CSV Data ---
-    datalist2=read.csv(sprintf(file.path(getwd(), "scenario%s_n%s_p%s_%s_noise%s.csv"),ddad,nx[nn],px[pp],v,noise))
+    datalist2=read.csv(sprintf(paste0(getwd(), "/test/scenario%s_n%s_p%s_%s_noise%s.csv"),ddad,nx[nn],px[pp],v,noise))
   }
   #======================================
   traindat=datalist1
@@ -259,7 +259,7 @@ om=function(f){ ############sim func#################
   
   # TODO: Continue with model fitting and result saving (e.g., causal MARS, GLPS, causal forests)
   #################MARS GL GLPS TO###################################  
-  source(file.path(getwd(), "fun_GL_PS.R"))
+  source("E:/SCBM/test326/fun_GL_PS.R")
   traindat=cbind(1,datalist1)
   testdat=cbind(1,datalist2)
   tau=testdat$tau
@@ -274,7 +274,7 @@ om=function(f){ ############sim func#################
   print("1")
 
   #################STRA###################################
-  source(file.path(getwd(), "fun_GL_PS_stratify.R"))
+  source("E:/SCBM/test326/fun_GL_PS_stratify.R")
   traindat=cbind(1,datalist1)
   testdat=cbind(1,datalist2)
   hte_stra=marslasso_stra(traindat,testdat,ps,deg=2,boost=40,per_resamp=0.5)
@@ -319,7 +319,7 @@ om=function(f){ ############sim func#################
   ######################save########################
 
 # --- Save Results to CSV ---
-  write.csv(res.save,sprintf(file.path(getwd(), "scenario_%s_n%s_p%s_%s_noise%s.csv"),ddad,nx[nn],px[pp],v,noise))
+  write.csv(res.save,sprintf(paste0(getwd(), "/out/scenario_%s_n%s_p%s_%s_noise%s.csv"),ddad,nx[nn],px[pp],v,noise))
 # --- Return Final Output ---
   return(res.save)
 }

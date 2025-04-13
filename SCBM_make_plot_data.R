@@ -29,39 +29,39 @@ ferr=function(v){
     #GL
 
 # --- Load CSV Data ---
-    tau1=read.csv(sprintf(file.path(getwd(), "scenario_%s_n%s_p%s_%s_noise%s.csv"),ddad,nx[nn],px[pp],v,noise))[,3]
+    tau1=read.csv(sprintf(paste0(getwd(), "/out/scenario_%s_n%s_p%s_%s_noise%s.csv"),ddad,nx[nn],px[pp],v,noise))[,3]
     #GL ps
 
 # --- Load CSV Data ---
-    tau2=read.csv(sprintf(file.path(getwd(), "scenario_%s_n%s_p%s_%s_noise%s.csv"),ddad,nx[nn],px[pp],v,noise))[,4]
+    tau2=read.csv(sprintf(paste0(getwd(), "/out/scenario_%s_n%s_p%s_%s_noise%s.csv"),ddad,nx[nn],px[pp],v,noise))[,4]
     #GL STRA
 
 # --- Load CSV Data ---
-    tau3=read.csv(sprintf(file.path(getwd(), "scenario_%s_n%s_p%s_%s_noise%s.csv"),ddad,nx[nn],px[pp],v,noise))[,5]
+    tau3=read.csv(sprintf(paste0(getwd(), "/out/scenario_%s_n%s_p%s_%s_noise%s.csv"),ddad,nx[nn],px[pp],v,noise))[,5]
     #to
 
 # --- Load CSV Data ---
-    tau4=read.csv(sprintf(file.path(getwd(), "scenario_%s_n%s_p%s_%s_noise%s.csv"),ddad,nx[nn],px[pp],v,noise))[,6]
+    tau4=read.csv(sprintf(paste0(getwd(), "/out/scenario_%s_n%s_p%s_%s_noise%s.csv"),ddad,nx[nn],px[pp],v,noise))[,6]
     #BCM
 
 # --- Load CSV Data ---
-    tau5=read.csv(sprintf(file.path(getwd(), "scenario_%s_n%s_p%s_%s_noise%s.csv"),ddad,nx[nn],px[pp],v,noise))[,7]
+    tau5=read.csv(sprintf(paste0(getwd(), "/out/scenario_%s_n%s_p%s_%s_noise%s.csv"),ddad,nx[nn],px[pp],v,noise))[,7]
     #BCM1
 
 # --- Load CSV Data ---
-    tau6=read.csv(sprintf(file.path(getwd(), "scenario_%s_n%s_p%s_%s_noise%s.csv"),ddad,nx[nn],px[pp],v,noise))[,8]
+    tau6=read.csv(sprintf(paste0(getwd(), "/out/scenario_%s_n%s_p%s_%s_noise%s.csv"),ddad,nx[nn],px[pp],v,noise))[,8]
     #CF
 
 # --- Load CSV Data ---
-    tau7=read.csv(sprintf(file.path(getwd(), "scenario_%s_n%s_p%s_%s_noise%s.csv"),ddad,nx[nn],px[pp],v,noise))[,9]
+    tau7=read.csv(sprintf(paste0(getwd(), "/out/scenario_%s_n%s_p%s_%s_noise%s.csv"),ddad,nx[nn],px[pp],v,noise))[,9]
     #vt
 
 # --- Load CSV Data ---
-    tau8=read.csv(sprintf(file.path(getwd(), "scenario_%s_n%s_p%s_%s_noise%s.csv"),ddad,nx[nn],px[pp],v,noise))[,10]
+    tau8=read.csv(sprintf(paste0(getwd(), "/out/scenario_%s_n%s_p%s_%s_noise%s.csv"),ddad,nx[nn],px[pp],v,noise))[,10]
     #true tau
 
 # --- Load CSV Data ---
-    tau0=read.csv(sprintf(file.path(getwd(), "scenario_%s_n%s_p%s_%s_noise%s.csv"),ddad,nx[nn],px[pp],v,noise))[,2]
+    tau0=read.csv(sprintf(paste0(getwd(), "/out/scenario_%s_n%s_p%s_%s_noise%s.csv"),ddad,nx[nn],px[pp],v,noise))[,2]
     
     
     #scaled MSE
@@ -121,8 +121,8 @@ for (i in 1:8) {
   aaaf2=do.call(rbind, lapply(result[,2], "[", i))
 
 # --- Save Results to CSV ---
-  write.csv(t(sapply(aaaf1, unlist)),sprintf(file.path(getwd(), "bias1_res%s.csv"),i))
+  write.csv(t(sapply(aaaf1, unlist)),sprintf(paste0(getwd(), "/pdat/bias1_res%s.csv"),i))
 
 # --- Save Results to CSV ---
-  write.csv(t(sapply(aaaf2, unlist)),sprintf(file.path(getwd(), "mse1_res%s.csv"),i))
+  write.csv(t(sapply(aaaf2, unlist)),sprintf(paste0(getwd(), "/pdat/mse1_res%s.csv"),i))
 }

@@ -54,7 +54,7 @@ nop=8
 for (i in 1:nop) {
 
 # --- Load CSV Data ---
-  datalist[[i]]=read.csv(sprintf(file.path(getwd(), "%s1_res%s.csv"),pl.type,i))[-1]######input######
+  datalist[[i]]=read.csv(sprintf(paste0(getwd(), "/pdat/%s1_res%s.csv"),pl.type,i))[-1]######input######
 }
 dat=list()
 qp <-as.numeric(c(1:(12*ncol(npnp0)))) 
@@ -167,7 +167,7 @@ for (i in c(1,7)) {
 
 # --- Save Plot to File ---
   ggsave(
-    filename = paste0(file.path(getwd(), ""), pl.type, "0", i, ".eps"),
+    filename = paste0(paste0(getwd(), "/pic/"), pl.type, "0", i, ".eps"),
     plot = ppout,
     width = 15,
     height = 10,

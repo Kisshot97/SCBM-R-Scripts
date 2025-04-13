@@ -238,7 +238,7 @@ VIMP_PLOT=ggplot(data, aes(x = Variable, y = Importance, fill = Importance)) +
 # --- Save Plot to File ---
 ggsave(
   plot = VIMP_PLOT,
-  filename = paste0(file.path(getwd(), ""), "VIMP","pc", ".png"),
+  filename = paste0(paste0(getwd(), "/pic/"), "VIMP","pc", ".png"),
   width = 12,
   height = 8
 )
@@ -312,6 +312,8 @@ earthlasso <- function(datain,TO,btype=1,deg,maxn,samp){
 ##################################
 ####################################
 ####################################
+
+
 
 
 

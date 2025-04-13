@@ -272,7 +272,7 @@ pic=ggplot(quartile_means_melt, aes(x = Quartile, y = Mean, group = Variable, co
 
 # --- Save Plot to File ---
 ggsave(
-  filename = paste0(file.path(getwd(), ""), "tendpic", i, ".eps"),
+  filename = paste0(paste0(getwd(), "/pic/"), "tendpic", i, ".eps"),
   plot = pic,
   width = 13,
   height = 8,

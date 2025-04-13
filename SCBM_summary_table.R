@@ -52,7 +52,7 @@ library(gridExtra)
   for (i in 1:nop) {
 
 # --- Load CSV Data ---
-    datalist[[i]]=read.csv(sprintf(file.path(getwd(), "%s1_res%s.csv"),pl.type,i))[-1]######input######
+    datalist[[i]]=read.csv(sprintf(paste0(getwd(), "/pdat/%s1_res%s.csv"),pl.type,i))[-1]######input######
   }
   dat=list()
   qp <-as.numeric(c(1:(12*ncol(npnp0)))) 
@@ -102,7 +102,7 @@ library(gridExtra)
   for (i in 1:nop) {
 
 # --- Load CSV Data ---
-    datalist[[i]]=read.csv(sprintf(file.path(getwd(), "%s1_res%s.csv"),pl.type,i))[-1]######input######
+    datalist[[i]]=read.csv(sprintf(paste0(getwd(), "/pdat/%s1_res%s.csv"),pl.type,i))[-1]######input######
   }
   dat=list()
   qp <-as.numeric(c(1:(12*ncol(npnp0)))) 

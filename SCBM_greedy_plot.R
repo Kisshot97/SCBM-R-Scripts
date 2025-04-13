@@ -67,8 +67,9 @@ for (boost in g_boost) {
     out1=out2=out3=out4=numeric()
     for (i in 1:10) {
       # Construct file path
-      output_path <- sprintf(file.path(getwd(), "scenario%s_sam%s_boost%s.csv"), i, sam, boost)
-      
+      output_path_0 <- sprintf("/out/scenario%s_sam%s_boost%s.csv", i, sam, boost)
+      addr=getwd()
+      output_path <- paste0(addr,output_path_0)
       # Check if the file exists
       if (file.exists(output_path)) {
         # Read the data
@@ -153,9 +154,11 @@ ppout=grid.arrange(p1, p2, p3, nrow = 3)
 
 # --- Save Plot to File ---
 ggsave(
-  filename = paste0(file.path(getwd(), ""), "greed000.eps"), # 修改扩展名为 .eps
+  filename = paste0("paste0(getwd(), "/")pic/", "greed000.eps"), # 修改扩展名为 .eps
   plot = ppout, # 需要保存的图表对象
   width = 8,    # 图像宽度
   height = 10,  # 图像高度
   device = cairo_ps # 使用 Cairo PostScript 设备生成 EPS 文件
 )
+
+
