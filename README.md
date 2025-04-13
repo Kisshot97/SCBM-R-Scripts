@@ -21,7 +21,7 @@ All scripts are modularized and annotated in English. File paths are dynamically
 | `SCBM_summary_table.R`      | Computes average bias and MSE per method, exports LaTeX-ready tables. |
 | `SCBM_real_pd.R`            | Partial dependence plots (PDPs) for a real dataset using group lasso + MARS. |
 | `SCBM_real_vimp.R`          | Variable importance analysis for real-world data. |
-| `SCBM_realdata_greedy.R`    | real dataset. |
+| `SCBM_realdata_greedy.R`    | SEARCH the best parameters in real dataset. |
 ## Requirements
 
 These scripts rely on the following R packages:
