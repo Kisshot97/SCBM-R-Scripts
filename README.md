@@ -12,16 +12,15 @@ All scripts are modularized and annotated in English. File paths are dynamically
 |-----------------------------|-------------|
 | `fun_GL_PS.R`                | Group lasso + bootstrap bagging MARS model for HTE estimation, with IPTW and transformed outcome variants.  |
 | `fun_GL_PS_stratify.R`         | Group lasso + bootstrap bagging MARS model for HTE estimation, with stratification variant. |
-| `he.heatmapdata.R`         | Group lasso + bootstrap bagging MARS model for HTE estimation, with IPTW and transformed outcome variants. |
-
-| `he.heatmapplot.R`       | for the heatmapplot |
+| `he.heatmapdata.R`         | data for the heatmapplot of sensitivity analysis|
+| `he.heatmapplot.R`       | plot for the heatmapplot of sensitivity analysis|
 | `he.simulaitonplot.R`           | Generates boxplots for MSE or bias comparison across multiple methods. (plot)|
-| `he.simulaitonplot.R`        | Generates boxplots for MSE or bias comparison across multiple methods. (data)|
+| `he.simulaitondata.R`        | Generates boxplots for MSE or bias comparison across multiple methods. (data)|
 | `he.trendplot.R`         | Shows subgroup-wise trends of true vs. predicted treatment effects (HTEs). |
-| `SCBM_summary_table.R`      | Computes average bias and MSE per method, exports LaTeX-ready tables. |
 | `he.pd plot.R`            | Partial dependence plots (PDPs) for a real dataset using group lasso + MARS. |
-| `SCBM_real_vimp.R`          | Variable importance analysis for real-world data. |
-| `SCBM_realdata_greedy.R`    | SEARCH the best parameters in real dataset. |
+| `he.vimpplot.R`          | Variable importance analysis for real-world data. |
+| `he.VIMPvalidation.R`          | Validation of Variable importance analysis for real-world data. |
+| `he.realdatagreedy.R`    | SEARCH the best parameters in real dataset. |
 ## Requirements
 
 These scripts rely on the following R packages:
