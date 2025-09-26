@@ -1,0 +1,256 @@
+library(BART)
+library(glmnet)
+library("grpreg")
+library(parallel)
+library(grf)
+library(foreach)
+library(doParallel)
+set.seed(99)
+ntest=10
+n=2000
+p=20
+X=matrix(0,n,p)
+data_vimp=matrix(0,ntest,p)
+
+
+
+for (pc in 1:ntest) {
+group=rbinom(n,1,0.5)###
+g1 <- sort(unique(group))
+gn <- length(group)
+g<-numeric(gn)
+g[which(group==g1[1])]=0
+g[which(group==g1[2])]=1
+#############data process############
+
+
+X_random <- matrix(rnorm(n = nrow(X) * ncol(X), mean = 1, sd = 0.5),
+                nrow = nrow(X), ncol = ncol(X))
+colnames(X_random) <- colnames(X)
+X_random <- as.data.frame(X_random)
+
+#standardize X
+X_scaled <- data.frame(scale(X_random))
+X=X_scaled
+y_va=0.2*X_scaled$V1+0.2*X_scaled$V2+0.2*X_scaled$V3+0.2*X_scaled$V4+
+     0.5*g*X_scaled$V1+0.25*g*X_scaled$V2+
+     0.1*rnorm(n= nrow(X),mean = 1, sd = 0.5) # 设置y 以及 HTE 
+  
+  #naive linear setting
+#y_va=quan(y_va)
+ytt=y_va
+datfortrain=data.frame(ytt,g,X_scaled)
+ps=0.5
+Zpe=g*ytt/ps+(1-g)*(-ytt)/(1-ps)
+y_ps=Zpe
+nboots=100
+maxn=ncol(X_scaled)
+per_resamp=1
+indat=datfortrain
+bcd=list()
+deg=2
+
+###################loop####################
+vimp=numeric(ncol(X))
+for (r in 1) {
+  cl <- makeCluster(25)  
+  registerDoParallel(cl)
+  
+  # Parallel execution with foreach
+  bcd <- foreach(i = 1:nboots) %dopar% {
+    earthlasso(indat, Zpe, deg = deg, maxn = maxn, samp = per_resamp)
+  }
+  
+  # Stop the cluster
+stopCluster(cl)
+cut0=numeric()
+dir0=numeric()
+coe0=numeric()    
+q0=list()
+for (i in 1:nboots) {
+  cut0=rbind(cut0,bcd[[i]][[2]])
+  dir0=rbind(dir0,bcd[[i]][[3]])
+  coe0=rbind(coe0,data.frame(bcd[[i]][[4]]))
+  q0[[i]]=bcd[[i]][[5]]
+}
+
+#============group lasso==============#
+
+XX_test=numeric()
+for (i in 1:nrow(X)) {
+  xin=matrix(unlist(rep(X[i,],nrow(cut0))),nrow = nrow(cut0),byrow = TRUE)-cut0
+  dirin=xin*dir0
+  a02=which(dir0==2)##
+  dirin[which(dirin==0)]=1
+  dirin[dirin<0]=0
+  dirin[a02]=xin[a02]
+  bs=data.frame(apply(dirin,1,prod))#*coe0#*coe0#
+  bs=unlist(bs)
+  XX_test=rbind(XX_test,bs)
+}
+xxg=cbind(XX_test*g,XX_test*(1-g))
+xxg1=cbind(XX_test*(1-g),XX_test*g)
+groupx=c(c(1:ncol(XX_test)),c(1:ncol(XX_test)))
+assign(paste0("cv.glmdl",1),cv.grpreg(xxg,ytt,group=groupx,nfolds=10))
+#assign(paste0("cv.glmdl",2),cv.grpreg(xxg,y_ps,group=groupx,nfolds=10))
+#assign(paste0("cv.glmdl",3),cv.grpreg(xxg,y_ps1,group=groupx,nfolds=10))
+fittau0_err=predict(cv.glmdl1,X=xxg)################用HTE验证 而不是YTTYTT
+fittau1_err=predict(cv.glmdl1,X=xxg1)
+fittau_tau=abs(fittau1_err-fittau0_err)
+
+fitfun <- function(p,oobX,cut0,dir0){
+  ec0=which(dir0[,p]%in%0==FALSE)
+  XX_test2=numeric()
+  for (i in 1:nrow(oobX)) {
+    xin=matrix(unlist(rep(oobX[i,],nrow(cut0))),nrow = nrow(cut0),byrow = TRUE)-cut0
+    dirin=xin*dir0
+    a02=which(dir0==2)
+    dirin[which(dirin==0)]=1
+    dirin[dirin<0]=0
+    dirin[a02]=xin[a02]
+    dirin[ec0,p]=0
+    bs=apply(dirin,1,prod)
+    XX_test2=rbind(XX_test2,bs)
+  }
+  return(XX_test2)
+}
+#########################vimp#################################
+
+cl <- makeCluster(5)
+p=c(1:ncol(X))#ncol(X)
+bcm=list()
+bcm=parLapply(cl,p,fitfun,X,cut0,dir0)
+stopCluster(cl)
+fitm=numeric()
+for (i in 1:ncol(X)) {
+  xxg2t=cbind(bcm[[i]]*g,bcm[[i]]*(1-g))
+  xxg2tt=cbind(bcm[[i]]*(1-g),bcm[[i]]*g)
+  aa0=predict(cv.glmdl1,X=xxg2t)
+  aa1=predict(cv.glmdl1,X=xxg2tt)
+  aatau=aa1-aa0
+  aatau_err=abs(aatau)
+  fitm=rbind(fitm,aatau_err)
+}
+fitminu=matrix(rep(fittau_tau,ncol(X)),ncol = length(fittau_tau),byrow = TRUE)
+errm=apply(abs(fitm-fitminu), 1,sum)
+reserr=errm
+names(reserr)=colnames(X)
+vimp=rbind(vimp,reserr)
+print(paste0("i=",i))
+}
+
+vimp=vimp[-1,]
+#vimp_means <- vimpcolMeans(vimp)
+vimp_means <- vimp
+data_vimp[pc,]=vimp_means
+
+}
+
+vimp_means=apply(data_vimp, 2, mean)
+vimp_means=BBmisc::normalize(vimp_means,method= "range",range = c(0,100))
+sorted_indices <- order(vimp_means, decreasing = TRUE)
+vimp_sorted <- vimp_means[sorted_indices]
+
+
+#VIMP_PLOT=barplot(sort(reserr[which(reserr>0)],decreasing=T), main = "variable importance")
+#######################################PD###################################################
+
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+
+data <- data.frame(
+  Variable = names(X_scaled),
+  Importance = vimp_sorted
+)
+# 按 Importance 排序并重新设置因子顺序
+data <- data[order(-data$Importance), ]
+data$Variable <- factor(data$Variable, levels = data$Variable)
+# 使用 ggplot 作图
+VIMP_PLOT=ggplot(data, aes(x = Variable, y = Importance, fill = Importance)) +
+  geom_bar(stat = "identity") +  # 条形图
+  scale_fill_gradient(low = "#87A922", high = "#0B60B0") +  # 定义过渡色
+  labs(
+    title = "Variable Importance",
+    x = "Variables",
+    y = "Importance",
+    fill = "Importance"
+  ) +
+  # 最小化主题
+  theme(
+    legend.position = "none",
+    text = element_text(size = 16),
+    axis.title.x = element_text(size = 14),
+    axis.title.y = element_text(size = 12),
+    axis.text.x = element_text(size = 10, angle = 45, hjust = 1),
+    axis.text.y = element_text(size = 10),
+    plot.margin = unit(c(0.2, 0.2, 0.2, 0.2), "cm")
+  )
+
+ggsave(
+  filename = paste0(getwd(), "/add_pic/","VIMPrd_sim",100, ".eps"),
+  plot = VIMP_PLOT,
+  width = 15,
+  height = 10,
+  device = cairo_ps  # 使用 Cairo PostScript 设备生成 EPS 文件
+)
+############################################
+############################################
+############################################
+earthlasso <- function(datain,TO,btype=1,deg,maxn,samp){
+
+  ############start####################
+  library("earth")
+  library(glmnet)
+  DAT=sample(nrow(datain),round(samp*nrow(datain)),replace = TRUE)
+  dat=datain[DAT,]
+  oobdat=datain#[-DAT,]
+  TTO=TO[DAT]
+  oobTO=TO
+  X=dat[,c(-1,-2)]
+  oobX=oobdat[,c(-1,-2)]
+  ytt=dat[,1]
+  oobytt=oobdat[,1]
+  Z=dat[,2]
+  group=oobdat[,2]###??????
+  dat0=data.frame(Y=TTO,X)# sampled data
+  rawtauar=numeric()
+  rss3=numeric()
+  for (d in deg) {
+    q0=earth(Y~.,data=dat0,degree=d,thresh=0.001,nk=maxn,pmethod="none")
+    bx=q0$bx[,-1]
+    assign(paste0("bx",d),bx)
+    dir=q0$dirs[-1,]
+    assign(paste0("dir",d),dir)
+    cut=q0$cuts[-1,]
+    assign(paste0("cut",d),cut)
+    coe=q0$coefficients[-1,]
+    assign(paste0("coe",d),coe)
+    XX_test=numeric()
+    py1=predict(q0,newdata = oobX)
+    rss=(py1-oobTO)^2
+    #=====================================
+    rss3[d]=sum(rss)
+    assign(paste0("q0",d),q0)
+  }
+  df=which(rss3==min(na.omit(rss3)))[1]
+  bx=get(paste0("bx",df))
+  dir=get(paste0("dir",df))
+  cut=get(paste0("cut",df))
+  coe=get(paste0("coe",df))
+  q0=get(paste0("q0",df))
+  bcd=list(bx,cut,dir,coe,q0)
+  return(bcd)
+}
+##################################
+####################################
+####################################
+
+
+
+
+
+
+
+
+
