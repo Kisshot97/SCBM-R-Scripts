@@ -18,7 +18,7 @@ All scripts are modularized and annotated in English. File paths are dynamically
 | `he.simulaitondata.R`        | Generates boxplots for MSE or bias comparison across multiple methods. (data)|
 | `he.simulaitonsetting.R`        | Generates boxplots for MSE or bias comparison across multiple methods. (setting)|
 | `he.trendplot.R`         | Shows subgroup-wise trends of true vs. predicted treatment effects (HTEs). |
-| `he.pd plot.R`            | Partial dependence plots (PDPs) for a real dataset using group lasso + MARS. |
+| `he.pdplot.R`            | Partial dependence plots (PDPs) for a real dataset using group lasso + MARS. |
 | `he.vimpplot.R`          | Variable importance analysis for real-world data. |
 | `he.VIMPvalidation.R`          | Validation of Variable importance analysis for real-world data. |
 | `he.realdatagreedy.R`    | SEARCH the best parameters in real dataset. |
