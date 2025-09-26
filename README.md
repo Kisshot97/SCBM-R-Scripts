@@ -1,10 +1,6 @@
 # SCBM R Scripts
 
-This repository contains a collection of R scripts for the SCBM (Structured Causal Boosting with Modularity) project. The scripts support data simulation, causal inference modeling, subgroup effect analysis, model evaluation, and visualization in both randomized and observational data settings.
-
-## Project Structure
-
-All scripts are modularized and annotated in English. File paths are dynamically constructed using `getwd()` to ensure compatibility across environments.
+This repository contains a collection of R scripts for the SCBM (Shrinkage Causal Bootstrap MARS) project. The scripts support data simulation, causal inference modeling, subgroup effect analysis, model evaluation, and visualization in both randomized and observational data settings.
 
 ## Included Scripts
 
