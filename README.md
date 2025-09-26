@@ -41,3 +41,5 @@ Install all dependencies with:
 install.packages(c("grf", "earth", "glmnet", "grpreg", "BART", "randomForest",
                    "rpart", "ggplot2", "reshape2", "doParallel", "foreach",
                    "cowplot", "gridExtra"))
+install.packages("remotes")
+remotes::install_github("saberpowers/causalLearning")
