@@ -16,6 +16,7 @@ All scripts are modularized and annotated in English. File paths are dynamically
 | `he.heatmapplot.R`       | plot for the heatmapplot of sensitivity analysis|
 | `he.simulaitonplot.R`           | Generates boxplots for MSE or bias comparison across multiple methods. (plot)|
 | `he.simulaitondata.R`        | Generates boxplots for MSE or bias comparison across multiple methods. (data)|
+| `he.simulaitonsetting.R`        | Generates boxplots for MSE or bias comparison across multiple methods. (setting)|
 | `he.trendplot.R`         | Shows subgroup-wise trends of true vs. predicted treatment effects (HTEs). |
 | `he.pd plot.R`            | Partial dependence plots (PDPs) for a real dataset using group lasso + MARS. |
 | `he.vimpplot.R`          | Variable importance analysis for real-world data. |
